@@ -1,0 +1,128 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'app\bootstrap.min.css' %}">
+    <style>
+        #logout{
+            width: 120px;
+            color: white;
+            display: inline-block;
+            border: 1.5px solid crimson;
+            background-color: crimson;
+            text-align: center;
+            padding: 5px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all .2s ease-out;
+        }
+        #logout:hover{
+            background-color: white;
+            color: crimson;
+        }
+
+        #signin{
+            width: 120px;
+            color: white;
+            display: inline-block;
+            border: 1.5px solid #535353;
+            background-color: #535353;
+            text-align: center;
+            padding: 5px;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all .2s ease-out;
+        }
+
+        #signin:hover{
+            background-color: white;
+            color: #535353;
+        }
+
+        .form-control{
+            box-shadow: none !important;
+            border-radius: 50px;
+        }
+        #save-email{
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            background-color: rgb(0, 132, 255);
+            border: 2px solid rgb(0, 132, 255);
+            color: white;
+            transition: all .2s ease-out;
+            box-shadow: none;
+            border-radius: 50px;
+        }
+        #save-email:hover{
+            color: rgb(0, 132, 255);
+            background-color: white;
+        }
+    </style>
+    <title>Email Validator</title>
+</head>
+<body>
+    <div class="container-fluid border-bottom">
+        <nav class="d-flex justify-content-between align-items-center py-3">
+            <h5 style="font-size: 30px;font-weight: 400;">Email Validator</h5>
+            {% if user.is_superuser %}
+                <a href="{% url 'app:logout' %}" id="logout">Logout</a>
+            {% else %}
+                <a href="{% url 'app:signin_admin' %}" id="signin">Sign In</a>
+            {% endif %}
+        </nav>
+    </div>
+    <div class="container-fluid my-3">
+        {% csrf_token %}
+        {% if user.is_superuser %}
+            <div class="row gy-3">
+                <div class="col-md-5 col-lg-4 col-xl-3 col-xxl-2">
+                    <div style="position: sticky; top: 10px;" class="card shadow-sm">
+                        <div class="card-body">
+                            <!-- Message -->
+                            <p class="alert p-2 small" id="message"></p>
+                            <div>
+                                <label for="email">Email</label>
+                                <input type="email" id="email" class="form-control">
+                                <p class="m-auto small text-muted">Enter a valid email.</p>
+                            </div>
+                            <button type="button" data-add-email-url="{% url 'app:add_email' %}" id="save-email">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 col-lg-8 col-xl-9 col-xxl-10">
+                    <div class="card">
+                        <div class="card-header">Validated Emails</div>
+                        <ul class="list-group shadow-sm" id="emails">
+                            {% for email in emails %}
+                                <li class="list-group-item">{{email.email}}</li>
+                            {% empty %}
+                                <h4 id="no-email" class="text-muted text-center my-3">No emails have been validated.</h4>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="card shadow-sm mx-auto my-5" style="max-width: 400px;">
+                <div class="card-body" >
+                    <!-- Message -->
+                    <p class="alert p-2 small" id="message"></p>
+                    <div>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control">
+                        <p class="m-auto small text-muted">Enter a valid email.</p>
+                    </div>
+                    <button data-add-email-url="{% url 'app:add_email' %}" type="button" id="save-email">Save</button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <script src="{% static 'app\jquery.js' %}"></script>
+    <script src="{% static 'app\index.js' %}"></script>
+</body>
+</html>

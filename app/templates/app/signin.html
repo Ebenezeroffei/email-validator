@@ -1,0 +1,61 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'app\bootstrap.min.css' %}">
+    <style>
+        .form-control{
+            box-shadow: none !important;
+            border-radius: 50px;
+        }
+        #signin{
+            display: block;
+            width: 300px;
+            margin: 20px auto;
+            background-color: rgb(0, 132, 255);
+            border: 2px solid rgb(0, 132, 255);
+            color: white;
+            transition: all .2s ease-out;
+            box-shadow: none;
+            border-radius: 50px;
+        }
+        #signin:hover{
+            color: rgb(0, 132, 255);
+            background-color: white;
+        }
+    </style>
+    <title>Sign In</title>
+</head>
+<body>
+    <div class="d-flex justify-content-center">
+        <div style='margin-top: 100px' class="card shadow" style="width: 400px;">
+            <div class="card-body">
+                {% if messages %}
+                    {% for message in messages %}
+                        <p class="alert p-2 alert-danger small">{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
+                <form action="." method="POST">
+                    {% csrf_token %}
+                    <!-- Username -->
+                    <div class="mb-2">
+                        <label for="id_username">Username</label>
+                        <input type="text" required name="username" id="id_username" class="form-control">
+                    </div>
+                    <!-- Password -->
+                    <div class="mb-2">
+                        <label for="id_password">Password</label>
+                        <input type="password" required id="id_password" name="password" class="form-control">
+                    </div>
+                    <!-- Submit -->
+                    <input type="submit" class="btn" id="signin" value="Sign In">
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
